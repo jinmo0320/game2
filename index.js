@@ -182,6 +182,29 @@ class Rain {
     this.vy = 5;
   }
   draw() {
+    this.topX = this.x;
+    this.topY = this.y - 35;
+    ctx.beginPath();
+    ctx.fillStyle = '#0984e3';
+    ctx.moveTo(this.x - this.radius, this.y);
+    ctx.bezierCurveTo(
+      this.x - this.radius,
+      this.y - this.radius,
+      this.x,
+      this.y - this.radius,
+      this.topX,
+      this.topY
+    );
+    ctx.bezierCurveTo(
+      this.x,
+      this.y - this.radius,
+      this.x + this.radius,
+      this.y - this.radius,
+      this.x + this.radius,
+      this.y
+    );
+    ctx.fill();
+
     ctx.beginPath();
     ctx.fillStyle = '#0984e3';
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
@@ -310,9 +333,7 @@ let timerId;
 function animate() {
   timerId = requestAnimationFrame(animate);
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (timerId <= 300) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
@@ -330,10 +351,14 @@ function animate() {
     for (let i = 0; i < 1; i++) {
       ice[i].update();
     }
-  } else {
+  } else if (timerId <= 3000) {
     levelUpdate(3);
 
     for (let i = 0; i < 2; i++) {
+      ice[i].update();
+    }
+  } else {
+    for (let i = 0; i < 10; i++) {
       ice[i].update();
     }
   }
