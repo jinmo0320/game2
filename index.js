@@ -247,18 +247,7 @@ class Ice {
   }
   draw() {
     ctx.beginPath();
-    const gradient = ctx.createRadialGradient(
-      this.x,
-      this.y,
-      5,
-      this.x,
-      this.y,
-      15
-    );
-    gradient.addColorStop(0, '#81ecec');
-    gradient.addColorStop(1, '#00cec9');
-
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = 'black';
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fill();
   }
@@ -320,7 +309,7 @@ function init() {
   ice = [];
 
   for (let i = 0; i < totalIce; i++) {
-    const radius = 15;
+    const radius = 10;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
     const y = 0;
 
@@ -367,7 +356,7 @@ function animate() {
 
   player.update();
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 5; i++) {
     rain[i].update();
   }
 }
