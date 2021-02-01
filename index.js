@@ -21,17 +21,17 @@ addEventListener('touchstart', keyDownHandler, false);
 addEventListener('touchend', keyUpHandler, false);
 
 function keyDownHandler(e) {
-  if (e.keyCode == 39 || e.x > stageWidth / 2) {
+  if (e.keyCode == 39 || e.clientX > stageWidth / 2) {
     rightPressed = true;
-  } else if (e.keyCode == 37 || e.x <= stageWidth / 2) {
+  } else if (e.keyCode == 37 || e.clientX <= stageWidth / 2) {
     leftPressed = true;
   }
 }
 
 function keyUpHandler(e) {
-  if (e.keyCode == 39 || e.x > stageWidth / 2) {
+  if (e.keyCode == 39 || e.clientX > stageWidth / 2) {
     rightPressed = false;
-  } else if (e.keyCode == 37 || e.x <= stageWidth / 2) {
+  } else if (e.keyCode == 37 || e.clientX <= stageWidth / 2) {
     leftPressed = false;
   }
 }
