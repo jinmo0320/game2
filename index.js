@@ -17,37 +17,21 @@ let leftPressed = false;
 addEventListener('keydown', keyDownHandler, false);
 addEventListener('keyup', keyUpHandler, false);
 
-addEventListener('touchstart', touchDownHandler, false);
-addEventListener('touchend', touchUpHandler, false);
+addEventListener('mousedown', keyDownHandler, false);
+addEventListener('mouseup', keyUpHandler, false);
 
 function keyDownHandler(e) {
-  if (e.keyCode == 39) {
+  if (e.keyCode == 39 || e.x > stageWidth / 2) {
     rightPressed = true;
-  } else if (e.keyCode == 37) {
+  } else if (e.keyCode == 37 || e.x <= stageWidth / 2) {
     leftPressed = true;
   }
 }
 
 function keyUpHandler(e) {
-  if (e.keyCode == 39) {
+  if (e.keyCode == 39 || e.x > stageWidth / 2) {
     rightPressed = false;
-  } else if (e.keyCode == 37) {
-    leftPressed = false;
-  }
-}
-
-function touchDownHandler(e) {
-  if (e.screenX > stageWidth / 2) {
-    rightPressed = true;
-  } else if (e.screenX <= stageWidth / 2) {
-    leftPressed = true;
-  }
-}
-
-function touchUpHandler(e) {
-  if (e.screenX > stageWidth / 2) {
-    rightPressed = false;
-  } else if (e.screenX <= stageWidth / 2) {
+  } else if (e.keyCode == 37 || e.x <= stageWidth / 2) {
     leftPressed = false;
   }
 }
