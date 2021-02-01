@@ -5,6 +5,9 @@ const notice = document.querySelector('.notice');
 const score = document.querySelector('.score');
 const best = document.querySelector('.best');
 
+const stageWidth = document.body.clientWidth;
+const stageHeight = document.body.clientHeight;
+
 canvas.width = 400;
 canvas.height = 600;
 
@@ -14,8 +17,8 @@ let leftPressed = false;
 addEventListener('keydown', keyDownHandler, false);
 addEventListener('keyup', keyUpHandler, false);
 
-addEventListener('touchstart', keyDownHandler, false);
-addEventListener('touchend', keyUpHandler, false);
+addEventListener('touchstart', touchDownHandler, false);
+addEventListener('touchend', touchUpHandler, false);
 
 function keyDownHandler(e) {
   if (e.keyCode == 39) {
@@ -29,6 +32,22 @@ function keyUpHandler(e) {
   if (e.keyCode == 39) {
     rightPressed = false;
   } else if (e.keyCode == 37) {
+    leftPressed = false;
+  }
+}
+
+function touchDownHandler(e) {
+  if (e.clientX > stageWidth / 2) {
+    rightPressed = true;
+  } else {
+    leftPressed = true;
+  }
+}
+
+function touchUpHandler(e) {
+  if (e.clientX > stageWidth / 2) {
+    rightPressed = false;
+  } else {
     leftPressed = false;
   }
 }
