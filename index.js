@@ -5,8 +5,13 @@ const notice = document.querySelector('.notice');
 const score = document.querySelector('.score');
 const best = document.querySelector('.best');
 
-const stageWidth = innerWidth;
-const stageHeight = innerHeight;
+let stageWidth = innerWidth;
+let stageHeight = innerHeight;
+
+addEventListener('resize', () => {
+  let stageWidth = innerWidth;
+  let stageHeight = innerHeight;
+});
 
 canvas.width = 400;
 canvas.height = 600;
@@ -17,13 +22,13 @@ let leftPressed = false;
 addEventListener('keydown', keyDownHandler, false);
 addEventListener('keyup', keyUpHandler, false);
 
-addEventListener('touchstart', keyDownHandler, false);
-addEventListener('touchend', keyUpHandler, false);
+addEventListener('touchstart', touchDown, false);
+addEventListener('touchend', touchUp, false);
 
 function keyDownHandler(e) {
-  if (e.keyCode == 39 || e.clientX > stageWidth / 2) {
+  if (e.keyCode == 39) {
     rightPressed = true;
-  } else if (e.keyCode == 37 || e.clientX <= stageWidth / 2) {
+  } else if (e.keyCode == 37) {
     leftPressed = true;
   }
 }
@@ -36,14 +41,57 @@ function keyUpHandler(e) {
   }
 }
 
+function touchDown(e) {
+  if (e.touches[0].clientX > stageWidth / 2) {
+    rightPressed = true;
+  } else {
+    leftPressed = true;
+  }
+}
+
+function touchUp(e) {
+  rightPressed = false;
+  leftPressed = false;
+}
+
 function getDis(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+}
+
+function checkMobileDevice() {
+  var mobileKeyWords = new Array(
+    'Android',
+    'iPhone',
+    'iPod',
+    'BlackBerry',
+    'Windows CE',
+    'SAMSUNG',
+    'LG',
+    'MOT',
+    'SonyEricsson'
+  );
+  for (var info in mobileKeyWords) {
+    if (navigator.userAgent.match(mobileKeyWords[info]) != null) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function gameOver() {
   cancelAnimationFrame(timerId);
 
   document.body.style.backgroundColor = '#00a8ff';
+
+  if (checkMobileDevice()) {
+    notice.innerHTML = '재시작하려면 여기를 누르세요';
+    notice.addEventListener('click', () => {
+      location.reload();
+    });
+  } else {
+    notice.innerHTML = '재시작하려면 Enter 키를 누르세요';
+  }
+
   notice.style.color = 'white';
 
   addEventListener('keydown', (e) => {
@@ -556,5 +604,4 @@ function animate() {
 
 init();
 setBest();
-console.log(stageWidth, stageHeight);
 animate();
