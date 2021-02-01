@@ -14,6 +14,9 @@ let leftPressed = false;
 addEventListener('keydown', keyDownHandler, false);
 addEventListener('keyup', keyUpHandler, false);
 
+addEventListener('touchstart', keyDownHandler, false);
+addEventListener('touchend', keyUpHandler, false);
+
 function keyDownHandler(e) {
   if (e.keyCode == 39) {
     rightPressed = true;
@@ -63,7 +66,7 @@ function setBest() {
 }
 
 function levelUpdate(num) {
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
   ctx.font = '50px "Anton"';
   ctx.fillText(`${num}`, canvas.width / 2, canvas.height / 2);
 }
@@ -240,15 +243,30 @@ class Ice {
     this.radius = radius;
 
     this.vx = 0;
-    this.vy = 5;
+    this.vy = 3;
     this.gravity = 0.5;
+
+    this.side = this.radius * 2 + 4;
 
     this.isTouch = false;
   }
   draw() {
     ctx.beginPath();
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'white';
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fill();
+
+    ctx.beginPath();
+    const g = ctx.createRadialGradient(this.x, this.y, 3, this.x, this.y, 10);
+    g.addColorStop(0, '#81ecec');
+    g.addColorStop(1, '#00cec9');
+    ctx.fillStyle = g;
+    ctx.rect(
+      this.x - this.side / 2,
+      this.y - this.side / 2,
+      this.side,
+      this.side
+    );
     ctx.fill();
   }
   update() {
@@ -281,6 +299,154 @@ class Ice {
   }
 }
 
+class Powder {
+  constructor(x) {
+    this.x = x;
+    this.y = 0;
+    this.w = 0;
+    this.h = canvas.height;
+
+    this.laserH = 0;
+
+    this.isWarned = false;
+    this.isFinished = false;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = 'transparent';
+    ctx.moveTo(this.x + 15, this.y);
+    ctx.lineTo(this.x + 15, this.laserH);
+    ctx.stroke();
+
+    ctx.beginPath();
+    const g3 = ctx.createLinearGradient(
+      this.x,
+      this.y,
+      this.x + this.w,
+      this.y
+    );
+    g3.addColorStop(0, '#ecf0f1');
+    g3.addColorStop(0.5, '#bdc3c7');
+    g3.addColorStop(1, '#ecf0f1');
+    ctx.fillStyle = g3;
+    ctx.rect(this.x, this.y, this.w, this.h);
+    ctx.fill();
+  }
+  update() {
+    if (this.isWarned === false) {
+      if (this.laserH > canvas.height) {
+        this.laserH = 0;
+        this.isWarned = true;
+        this.w = 30;
+      } else {
+        this.laserH += 10;
+      }
+    }
+    if (this.isWarned === true) {
+      if (this.w > 0) {
+        this.x += 0.1;
+        this.w = this.w.toFixed(1) - 0.2;
+        console.log(this.w);
+      } else {
+        this.isFinished = true;
+      }
+    }
+    if (this.isWarned === true && this.isFinished !== true)
+      if (
+        player.x + player.radius > this.x &&
+        player.x - player.radius < this.x + this.w
+      ) {
+        gameOver();
+      }
+    this.draw();
+  }
+}
+
+class FireExtinguisher {
+  constructor(x) {
+    this.w = 30;
+    this.h = 100;
+
+    this.nozzleW = 40;
+    this.nozzleH = 50;
+
+    this.gap = 5;
+
+    this.x = x;
+    this.y = 0 - this.h - this.nozzleH;
+
+    this.powder = new Powder(this.x);
+
+    this.isShot = false;
+    this.isUp = false;
+  }
+  draw() {
+    ctx.beginPath();
+    const g2 = ctx.createLinearGradient(this.x, 0, this.x + this.w, 0);
+    g2.addColorStop(0, '#1e272e');
+    g2.addColorStop(0.5, '#485460');
+    g2.addColorStop(1, '#1e272e');
+    ctx.fillStyle = g2;
+    ctx.rect(this.x, this.y, this.w, this.h);
+    ctx.fill();
+
+    ctx.beginPath();
+    const g = ctx.createLinearGradient(
+      this.x - this.gap,
+      this.y + this.h + this.nozzleH,
+      this.x + this.w + this.gap,
+      this.y + this.h + this.nozzleH
+    );
+    g.addColorStop(0, '#f1c40f');
+    g.addColorStop(0.5, '#ffdd59');
+    g.addColorStop(1, '#f1c40f');
+    ctx.fillStyle = g;
+    ctx.moveTo(this.x, this.y + this.h);
+    ctx.lineTo(this.x + this.w, this.y + this.h);
+    ctx.lineTo(this.x + this.w + this.gap, this.y + this.h + this.nozzleH);
+    ctx.lineTo(this.x - this.gap, this.y + this.h + this.nozzleH);
+    ctx.fill();
+
+    ctx.beginPath();
+    const g1 = ctx.createLinearGradient(this.x, 0, this.x + this.w, 0);
+    g1.addColorStop(0, '#95a5a6');
+    g1.addColorStop(0.5, '#ecf0f1');
+    g1.addColorStop(1, '#95a5a6');
+    ctx.fillStyle = g1;
+    ctx.rect(this.x - 1, this.y + this.h - 7, this.w + 2, 7);
+    ctx.fill();
+  }
+  update() {
+    if (this.y < 0 && this.isShot === false) {
+      this.y += 10;
+    } else {
+      this.powder.update();
+      if (this.powder.isFinished === true) {
+        this.isShot = true;
+      }
+    }
+    if (this.isShot === true) {
+      this.y -= 10;
+      if (this.y === 0 - this.h - this.nozzleH) {
+        this.isUp = true;
+      }
+    }
+    if (this.isUp === false) {
+      this.draw();
+    }
+    if (this.isUp === true) {
+      this.x = Math.random() * (canvas.width - 20);
+      this.y = 0 - this.h - this.nozzleH;
+
+      this.powder = new Powder(this.x);
+
+      this.isShot = false;
+      this.isUp = false;
+    }
+  }
+}
+
 let player;
 const playerRadius = 20;
 
@@ -288,6 +454,8 @@ let totalRain = 10;
 let rain;
 let totalIce = 10;
 let ice;
+let totalFireExtinguisher = 10;
+let fireExtinguisher;
 
 function init() {
   player = new Player(
@@ -299,7 +467,7 @@ function init() {
   rain = [];
 
   for (let i = 0; i < totalRain; i++) {
-    const radius = 15;
+    const radius = 12;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
     const y = Math.random() * (canvas.height * 2) - canvas.height * 2;
 
@@ -315,50 +483,69 @@ function init() {
 
     ice.push(new Ice(x, y, radius));
   }
+
+  fireExtinguisher = [];
+
+  for (let i = 0; i < totalFireExtinguisher; i++) {
+    const x = Math.random() * (canvas.width - 20);
+
+    fireExtinguisher.push(new FireExtinguisher(x));
+  }
 }
 
 let timerId;
+let num;
 
 function animate() {
   timerId = requestAnimationFrame(animate);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (timerId <= 300) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+  if (timerId <= 10) {
+    ctx.save();
+  } else if (timerId <= 200) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.font = '30px "Anton"';
+
     ctx.fillText(
       `Key Press '←' or '→'`,
       canvas.width / 2 - 110,
       canvas.height / 2
     );
-  } else if (timerId <= 1000) {
-    levelUpdate(1);
-  } else if (timerId <= 2000) {
-    levelUpdate(2);
+  }
 
-    for (let i = 0; i < 1; i++) {
-      ice[i].update();
+  if (timerId > 200) {
+    for (let i = 0; i < 5; i++) {
+      rain[i].update();
     }
-  } else if (timerId <= 3000) {
-    levelUpdate(3);
 
-    for (let i = 0; i < 2; i++) {
-      ice[i].update();
-    }
-  } else {
-    for (let i = 0; i < 10; i++) {
-      ice[i].update();
-    }
+    num = 1;
+    levelUpdate(num);
+  }
+  if (timerId > 1000) {
+    num = 2;
+
+    ice[0].update();
+  }
+  if (timerId > 2000) {
+    num = 3;
+
+    fireExtinguisher[0].update();
+  }
+  if (timerId > 3000) {
+    num = 4;
+
+    ice[1].update();
+  }
+  if (timerId > 4000) {
+    num = 5;
+
+    fireExtinguisher[1].update();
   }
 
   score.innerHTML = `Score: ${timerId}`;
 
   player.update();
-
-  for (let i = 0; i < 5; i++) {
-    rain[i].update();
-  }
 }
 
 init();
