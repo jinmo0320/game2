@@ -520,7 +520,6 @@ function animate() {
     }
 
     num = 1;
-    levelUpdate(num);
   }
   if (timerId > 1000) {
     num = 2;
@@ -541,6 +540,10 @@ function animate() {
     num = 5;
 
     fireExtinguisher[1].update();
+  }
+
+  if (timerId > 200) {
+    levelUpdate(num);
   }
 
   score.innerHTML = `Score: ${timerId}`;
