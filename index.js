@@ -39,7 +39,7 @@ function keyUpHandler(e) {
 function touchDownHandler(e) {
   if (e.clientX > stageWidth / 2) {
     rightPressed = true;
-  } else {
+  } else if (e.clientX <= stageWidth / 2) {
     leftPressed = true;
   }
 }
@@ -47,7 +47,7 @@ function touchDownHandler(e) {
 function touchUpHandler(e) {
   if (e.clientX > stageWidth / 2) {
     rightPressed = false;
-  } else {
+  } else if (e.clientX <= stageWidth / 2) {
     leftPressed = false;
   }
 }
