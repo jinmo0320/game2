@@ -5,8 +5,8 @@ const notice = document.querySelector('.notice');
 const score = document.querySelector('.score');
 const best = document.querySelector('.best');
 
-const stageWidth = document.body.clientWidth;
-const stageHeight = document.body.clientHeight;
+const stageWidth = innerWidth;
+const stageHeight = innerHeight;
 
 canvas.width = 400;
 canvas.height = 600;
@@ -37,17 +37,17 @@ function keyUpHandler(e) {
 }
 
 function touchDownHandler(e) {
-  if (e.clientX > stageWidth / 2) {
+  if (e.screenX > stageWidth / 2) {
     rightPressed = true;
-  } else if (e.clientX <= stageWidth / 2) {
+  } else if (e.screenX <= stageWidth / 2) {
     leftPressed = true;
   }
 }
 
 function touchUpHandler(e) {
-  if (e.clientX > stageWidth / 2) {
+  if (e.screenX > stageWidth / 2) {
     rightPressed = false;
-  } else if (e.clientX <= stageWidth / 2) {
+  } else if (e.screenX <= stageWidth / 2) {
     leftPressed = false;
   }
 }
@@ -572,4 +572,5 @@ function animate() {
 
 init();
 setBest();
+console.log(stageWidth, stageHeight);
 animate();
