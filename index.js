@@ -17,8 +17,8 @@ let leftPressed = false;
 addEventListener('keydown', keyDownHandler, false);
 addEventListener('keyup', keyUpHandler, false);
 
-addEventListener('mousedown', keyDownHandler, false);
-addEventListener('mouseup', keyUpHandler, false);
+addEventListener('touchstart', keyDownHandler, false);
+addEventListener('touchend', keyUpHandler, false);
 
 function keyDownHandler(e) {
   if (e.keyCode == 39 || e.x > stageWidth / 2) {
