@@ -132,6 +132,8 @@ class Player {
     this.sparkleX = this.x;
     this.sparkleY = this.topY;
 
+    this.sizeupY = 0;
+
     this.dir = 0;
   }
   draw() {
@@ -165,7 +167,7 @@ class Player {
       3,
       this.x,
       this.y,
-      20
+      this.radius
     );
     gradient.addColorStop(0, '#fff200');
     gradient.addColorStop(1, '#EE5A24');
@@ -217,7 +219,7 @@ class Player {
     this.topX += this.prevTopX;
 
     this.sparkleY -= 1;
-    if (this.sparkleY < this.y - 50) {
+    if (this.sparkleY < this.y - 50 - this.sizeupY) {
       this.sparkleY = this.topY;
       this.sparkleX = this.topX;
     }
@@ -579,6 +581,54 @@ class Flammable {
   }
 }
 
+class Branch {
+  constructor(count) {
+    this.radius = 20;
+    this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
+    this.y = 0;
+
+    this.vy = 7;
+
+    this.img = new Image();
+    this.img.src = './branch.png';
+
+    this.fixedPlayerR = player.radius;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.beginPath();
+    ctx.drawImage(this.img, this.x - 15, this.y - 15, 30, 30);
+
+    const g = ctx.createRadialGradient(
+      this.x,
+      this.y,
+      10,
+      this.x,
+      this.y,
+      this.radius
+    );
+    g.addColorStop(0, 'transparent');
+    g.addColorStop(1, '#27ae60');
+    ctx.fillStyle = g;
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fill();
+  }
+  update() {
+    this.y += this.vy;
+
+    if (
+      getDis(this.x, this.y, player.x, player.y) <
+      this.radius + player.radius
+    ) {
+      player.radius++;
+      player.y = canvas.height - player.radius;
+      player.topY -= 2;
+      player.sizeupY += 1;
+    }
+    this.draw();
+  }
+}
+
 let player;
 const playerRadius = 20;
 
@@ -590,6 +640,8 @@ const totalFireExtinguisher = 10;
 let fireExtinguisher;
 const totalFlammable = 10;
 let flammable;
+const totalBranch = 10;
+let branch;
 
 function init() {
   player = new Player(
@@ -631,11 +683,18 @@ function init() {
   for (let i = 0; i < totalFlammable; i++) {
     flammable.push(new Flammable(25));
   }
+
+  branch = [];
+
+  for (let i = 0; i < totalBranch; i++) {
+    branch.push(new Branch(i + 1));
+  }
 }
 
 let timerId;
 let num;
 let timing = Math.random() * 500 + 10;
+let timing2 = Math.random() * 500 + 10;
 
 function animate() {
   timerId = requestAnimationFrame(animate);
@@ -663,6 +722,9 @@ function animate() {
       if (timerId > 300 + timing) {
         flammable[0].update();
       }
+      if (timerId > 300 + timing2) {
+        branch[0].update();
+      }
 
       num = 1;
     }
@@ -672,6 +734,9 @@ function animate() {
 
       if (timerId > 1000 + timing) {
         flammable[1].update();
+      }
+      if (timerId > 1000 + timing2) {
+        branch[1].update();
       }
     }
   }
@@ -694,6 +759,9 @@ function animate() {
       if (timerId > 3000 + timing) {
         flammable[2].update();
       }
+      if (timerId > 3000 + timing2) {
+        branch[2].update();
+      }
     }
     if (timerId > 4000) {
       num = 5;
@@ -702,6 +770,9 @@ function animate() {
       }
       if (timerId > 4000 + timing) {
         flammable[3].update();
+      }
+      if (timerId > 4000 + timing2) {
+        branch[3].update();
       }
     }
   }
@@ -723,6 +794,9 @@ function animate() {
       if (timerId > 6000 + timing) {
         flammable[4].update();
       }
+      if (timerId > 6000 + timing2) {
+        branch[4].update();
+      }
     }
     if (timerId > 7000) {
       num = 8;
@@ -731,6 +805,9 @@ function animate() {
       }
       if (timerId > 7000 + timing) {
         flammable[5].update();
+      }
+      if (timerId > 7000 + timing2) {
+        branch[5].update();
       }
     }
   }
