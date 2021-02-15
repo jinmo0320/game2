@@ -11,14 +11,6 @@ bgm.currentTime = 1.5;
 bgm.loop = true;
 bgm.play();
 
-let stageWidth = innerWidth;
-let stageHeight = innerHeight;
-
-addEventListener('resize', () => {
-  let stageWidth = innerWidth;
-  let stageHeight = innerHeight;
-});
-
 canvas.width = 400;
 canvas.height = 600;
 
@@ -40,15 +32,15 @@ function keyDownHandler(e) {
 }
 
 function keyUpHandler(e) {
-  if (e.keyCode == 39 || e.clientX > stageWidth / 2) {
+  if (e.keyCode == 39 || e.clientX > canvas.width / 2) {
     rightPressed = false;
-  } else if (e.keyCode == 37 || e.clientX <= stageWidth / 2) {
+  } else if (e.keyCode == 37 || e.clientX <= canvas.width / 2) {
     leftPressed = false;
   }
 }
 
 function touchDown(e) {
-  if (e.touches[0].clientX > stageWidth / 2) {
+  if (e.touches[0].clientX > canvas.width / 2) {
     rightPressed = true;
   } else {
     leftPressed = true;
@@ -68,7 +60,7 @@ function checkMobileDevice() {
   var mobileKeyWords = new Array(
     'Android',
     'iPhone',
-    'iPod',
+    'iPad',
     'BlackBerry',
     'Windows CE',
     'SAMSUNG',
@@ -289,6 +281,7 @@ class Rain {
     ) {
       gameOver();
     }
+
     this.draw();
   }
 }
@@ -352,6 +345,7 @@ class Ice {
     ) {
       gameOver();
     }
+
     this.draw();
   }
 }
@@ -503,17 +497,89 @@ class FireExtinguisher {
   }
 }
 
+class Flammable {
+  constructor(radius) {
+    this.radius = radius;
+    this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
+    this.y = 0;
+
+    this.vy = 7;
+    this.vRadius = 50;
+
+    this.isGet = false;
+  }
+  draw() {
+    ctx.beginPath();
+    const g = ctx.createRadialGradient(
+      this.x,
+      this.y,
+      10,
+      this.x,
+      this.y,
+      this.radius
+    );
+    g.addColorStop(0, 'transparent');
+    g.addColorStop(1, '#e74c3c');
+    ctx.fillStyle = g;
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fill();
+  }
+  update() {
+    this.y += this.vy;
+
+    if (
+      getDis(this.x, this.y, player.x, player.y) <
+      this.radius + player.radius
+    ) {
+      if (this.radius < 1000) {
+        this.radius += this.vRadius;
+        this.isGet = true;
+      } else {
+        this.isGet = false;
+      }
+    }
+    if (this.isGet) {
+      for (let i = 0; i < totalRain; i++) {
+        if (
+          getDis(rain[i].x, rain[i].y, this.x, this.y) <
+          rain[i].radius + this.radius
+        ) {
+          rain[i].x =
+            Math.random() * (canvas.width - rain[i].radius * 2) +
+            rain[i].radius;
+          rain[i].y = Math.random() * (canvas.height * 2) - canvas.height * 2;
+        }
+      }
+    }
+    if (this.isGet) {
+      for (let i = 0; i < totalIce; i++) {
+        if (
+          getDis(ice[i].x, ice[i].y, this.x, this.y) <
+          ice[i].radius + this.radius
+        ) {
+          ice[i].x =
+            Math.random() * (canvas.width - ice[i].radius * 2) + ice[i].radius;
+          ice[i].y = 0 - ice[i].radius;
+        }
+      }
+    }
+    if (this.radius < 1000) {
+      this.draw();
+    }
+  }
+}
+
 let player;
 const playerRadius = 20;
 
-let totalRain = 20;
+const totalRain = 20;
 let rain;
-let totalIce = 10;
+const totalIce = 10;
 let ice;
-let totalFireExtinguisher = 10;
+const totalFireExtinguisher = 10;
 let fireExtinguisher;
-let totalFlammableMateria = 1;
-let flammableMateria;
+const totalFlammable = 10;
+let flammable;
 
 function init() {
   player = new Player(
@@ -549,10 +615,17 @@ function init() {
 
     fireExtinguisher.push(new FireExtinguisher(x));
   }
+
+  flammable = [];
+
+  for (let i = 0; i < totalFlammable; i++) {
+    flammable.push(new Flammable(20));
+  }
 }
 
 let timerId;
 let num;
+let timing = Math.random() * 500 + 10;
 
 function animate() {
   timerId = requestAnimationFrame(animate);
@@ -577,14 +650,22 @@ function animate() {
         rain[i].update();
       }
 
+      if (timerId > 200 + timing) {
+        flammable[0].update();
+      }
+
       num = 1;
     }
     if (timerId > 1000) {
       num = 2;
-
       ice[0].update();
+
+      if (timerId > 1000 + timing) {
+        flammable[1].update();
+      }
     }
   }
+  //소화기
   if (timerId > 2000 && timerId < 3000) {
     num = 3;
 
@@ -592,6 +673,7 @@ function animate() {
       fireExtinguisher[i].update();
     }
   }
+
   if (timerId < 5000) {
     if (timerId > 3000) {
       num = 4;
@@ -599,14 +681,21 @@ function animate() {
       for (let i = 1; i < 3; i++) {
         ice[i].update();
       }
+      if (timerId > 3000 + timing) {
+        flammable[2].update();
+      }
     }
     if (timerId > 4000) {
       num = 5;
       for (let i = 5; i < 9; i++) {
         rain[i].update();
       }
+      if (timerId > 4000 + timing) {
+        flammable[3].update();
+      }
     }
   }
+  //소화기
   if (timerId > 5000 && timerId < 6000) {
     num = 6;
 
@@ -614,17 +703,24 @@ function animate() {
       fireExtinguisher[i].update();
     }
   }
+
   if (timerId < 8000) {
     if (timerId > 6000) {
       num = 7;
       for (let i = 3; i < 6; i++) {
         ice[i].update();
       }
+      if (timerId > 6000 + timing) {
+        flammable[4].update();
+      }
     }
     if (timerId > 7000) {
       num = 8;
       for (let i = 9; i < 13; i++) {
         rain[i].update();
+      }
+      if (timerId > 7000 + timing) {
+        flammable[5].update();
       }
     }
   }
