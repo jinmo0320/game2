@@ -293,7 +293,7 @@ class Ice {
     this.radius = radius;
 
     this.vx = 0;
-    this.vy = 3;
+    this.vy = 0;
     this.gravity = 0.5;
 
     this.side = this.radius * 2 + 4;
@@ -507,9 +507,15 @@ class Flammable {
     this.vRadius = 50;
 
     this.isGet = false;
+
+    this.img = new Image();
+    this.img.src = './flammable.jpg';
   }
   draw() {
     ctx.beginPath();
+    ctx.beginPath();
+    ctx.drawImage(this.img, this.x - 17, this.y - 17, 34, 34);
+
     const g = ctx.createRadialGradient(
       this.x,
       this.y,
@@ -532,6 +538,7 @@ class Flammable {
       this.radius + player.radius
     ) {
       if (this.radius < 800) {
+        this.vy = 0;
         this.radius += this.vRadius;
         this.isGet = true;
       } else {
@@ -622,7 +629,7 @@ function init() {
   flammable = [];
 
   for (let i = 0; i < totalFlammable; i++) {
-    flammable.push(new Flammable(20));
+    flammable.push(new Flammable(25));
   }
 }
 
