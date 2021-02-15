@@ -7,6 +7,7 @@ const best = document.querySelector('.best');
 
 const bgm = new Audio('./bgm.mp3');
 bgm.volume = 0.5;
+bgm.currentTime = 1.5;
 bgm.loop = true;
 bgm.play();
 
@@ -382,9 +383,9 @@ class Powder {
       this.x + this.w,
       this.y
     );
-    g3.addColorStop(0, '#ecf0f1');
-    g3.addColorStop(0.5, '#bdc3c7');
-    g3.addColorStop(1, '#ecf0f1');
+    g3.addColorStop(0, '#b2bec3');
+    g3.addColorStop(0.5, '#dfe6e9');
+    g3.addColorStop(1, '#b2bec3');
     ctx.fillStyle = g3;
     ctx.rect(this.x, this.y, this.w, this.h);
     ctx.fill();
