@@ -531,7 +531,7 @@ class Flammable {
       getDis(this.x, this.y, player.x, player.y) <
       this.radius + player.radius
     ) {
-      if (this.radius < 1000) {
+      if (this.radius < 800) {
         this.radius += this.vRadius;
         this.isGet = true;
       } else {
@@ -560,10 +560,13 @@ class Flammable {
           ice[i].x =
             Math.random() * (canvas.width - ice[i].radius * 2) + ice[i].radius;
           ice[i].y = 0 - ice[i].radius;
+          ice[i].vy = 0;
+          ice[i].vx = 0;
+          ice[i].isTouch = false;
         }
       }
     }
-    if (this.radius < 1000) {
+    if (this.radius < 800) {
       this.draw();
     }
   }
