@@ -5,6 +5,11 @@ const notice = document.querySelector('.notice');
 const score = document.querySelector('.score');
 const best = document.querySelector('.best');
 
+const bgm = new Audio('./bgm.mp3');
+bgm.volume = 0.5;
+bgm.loop = true;
+bgm.play();
+
 let stageWidth = innerWidth;
 let stageHeight = innerHeight;
 
@@ -81,7 +86,7 @@ function checkMobileDevice() {
 function gameOver() {
   cancelAnimationFrame(timerId);
 
-  document.body.style.backgroundColor = '#00a8ff';
+  document.body.style.backgroundColor = '#261911';
 
   if (checkMobileDevice()) {
     notice.innerHTML = '재시작하려면 여기를 누르세요';
@@ -99,7 +104,7 @@ function gameOver() {
       location.reload();
     }
   });
-
+  bgm.pause();
   localStorage.setItem(`${timerId}`, `${timerId}`);
 }
 
@@ -237,7 +242,7 @@ class Rain {
   }
   draw() {
     this.topX = this.x;
-    this.topY = this.y - 35;
+    this.topY = this.y - 30;
     ctx.beginPath();
     ctx.fillStyle = '#0984e3';
     ctx.moveTo(this.x - this.radius, this.y);
@@ -398,7 +403,6 @@ class Powder {
       if (this.w > 0) {
         this.x += 0.1;
         this.w = this.w.toFixed(1) - 0.2;
-        console.log(this.w);
       } else {
         this.isFinished = true;
       }
@@ -470,7 +474,7 @@ class FireExtinguisher {
   }
   update() {
     if (this.y < 0 && this.isShot === false) {
-      this.y += 10;
+      this.y += 5;
     } else {
       this.powder.update();
       if (this.powder.isFinished === true) {
@@ -501,12 +505,14 @@ class FireExtinguisher {
 let player;
 const playerRadius = 20;
 
-let totalRain = 10;
+let totalRain = 20;
 let rain;
 let totalIce = 10;
 let ice;
 let totalFireExtinguisher = 10;
 let fireExtinguisher;
+let totalFlammableMateria = 1;
+let flammableMateria;
 
 function init() {
   player = new Player(
@@ -518,7 +524,7 @@ function init() {
   rain = [];
 
   for (let i = 0; i < totalRain; i++) {
-    const radius = 12;
+    const radius = 8;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
     const y = Math.random() * (canvas.height * 2) - canvas.height * 2;
 
@@ -564,33 +570,62 @@ function animate() {
       canvas.height / 2
     );
   }
+  if (timerId < 2000) {
+    if (timerId > 200) {
+      for (let i = 0; i < 5; i++) {
+        rain[i].update();
+      }
 
-  if (timerId > 200) {
-    for (let i = 0; i < 5; i++) {
-      rain[i].update();
+      num = 1;
     }
+    if (timerId > 1000) {
+      num = 2;
 
-    num = 1;
+      ice[0].update();
+    }
   }
-  if (timerId > 1000) {
-    num = 2;
-
-    ice[0].update();
-  }
-  if (timerId > 2000) {
+  if (timerId > 2000 && timerId < 3000) {
     num = 3;
 
-    fireExtinguisher[0].update();
+    for (let i = 0; i < 3; i++) {
+      fireExtinguisher[i].update();
+    }
   }
-  if (timerId > 3000) {
-    num = 4;
+  if (timerId < 5000) {
+    if (timerId > 3000) {
+      num = 4;
 
-    ice[1].update();
+      for (let i = 1; i < 3; i++) {
+        ice[i].update();
+      }
+    }
+    if (timerId > 4000) {
+      num = 5;
+      for (let i = 5; i < 9; i++) {
+        rain[i].update();
+      }
+    }
   }
-  if (timerId > 4000) {
-    num = 5;
+  if (timerId > 5000 && timerId < 6000) {
+    num = 6;
 
-    fireExtinguisher[1].update();
+    for (let i = 3; i < 9; i++) {
+      fireExtinguisher[i].update();
+    }
+  }
+  if (timerId < 8000) {
+    if (timerId > 6000) {
+      num = 7;
+      for (let i = 3; i < 6; i++) {
+        ice[i].update();
+      }
+    }
+    if (timerId > 7000) {
+      num = 8;
+      for (let i = 9; i < 13; i++) {
+        rain[i].update();
+      }
+    }
   }
 
   if (timerId > 200) {
