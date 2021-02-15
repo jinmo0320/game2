@@ -660,7 +660,7 @@ function animate() {
         rain[i].update();
       }
 
-      if (timerId > 200 + timing) {
+      if (timerId > 300 + timing) {
         flammable[0].update();
       }
 
