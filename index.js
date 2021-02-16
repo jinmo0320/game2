@@ -72,7 +72,7 @@ function setBest() {
 function setUserScore() {
   noticeScore.innerHTML = `현재 기록: ${timerId}`;
   setBest();
-  best.innerHTML = `Best: ${bestScore}`;
+  best.innerHTML = `최고 기록: ${bestScore}`;
   noticeBest.innerHTML = `이전 최고 기록: ${bestScore}`;
 }
 
@@ -711,7 +711,7 @@ function animate() {
     levelUpdate(num);
   }
 
-  score.innerHTML = `Score: ${timerId}`;
+  score.innerHTML = `현재 기록: ${timerId}`;
 
   player.update();
 }
