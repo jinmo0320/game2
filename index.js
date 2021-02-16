@@ -9,7 +9,7 @@ const noticeBest = document.querySelector('.notice_best');
 const startBtn = document.querySelector('.start');
 const filter = document.querySelector('.filter');
 
-const bgm = new Audio('./bgm.mp3');
+const bgm = new Audio('./audio/bgm.mp3');
 bgm.volume = 0.5;
 bgm.currentTime = 1.5;
 bgm.loop = true;
@@ -308,7 +308,7 @@ class Ice {
       this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
       this.y = 0 - this.radius;
       this.vx = 0;
-      this.vy = 5;
+      this.vy = 0;
       this.isTouch = false;
     } else {
       this.vy += this.gravity;
@@ -484,7 +484,7 @@ class Flammable {
     this.isGet = false;
 
     this.img = new Image();
-    this.img.src = './flammable.jpg';
+    this.img.src = './img/bomb.png';
   }
   draw() {
     ctx.beginPath();
@@ -554,6 +554,45 @@ class Flammable {
   }
 }
 
+class Wind {
+  constructor(x, y, radius) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+
+    this.vy = 20;
+    this.angle = Math.random() * 360;
+
+    this.swing = 1;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.fillStyle = 'black';
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fill();
+  }
+  update() {
+    this.angle += 0.5;
+    this.swing += 1;
+    this.x += Math.sin(this.angle) * this.swing;
+    this.y += this.vy;
+
+    if (this.y + this.radius > canvas.height) {
+      this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
+      this.y = 0 - canvas.height / 2;
+      this.swing = 1;
+    }
+    if (
+      getDis(this.x, this.y, player.x, player.y) <
+      this.radius + player.radius
+    ) {
+      gameOver();
+    }
+
+    this.draw();
+  }
+}
+
 let player;
 const playerRadius = 20;
 
@@ -565,6 +604,8 @@ const totalFireExtinguisher = 10;
 let fireExtinguisher;
 const totalFlammable = 10;
 let flammable;
+const totalWind = 10;
+let wind;
 
 function init() {
   player = new Player(
@@ -586,7 +627,7 @@ function init() {
   for (let i = 0; i < totalIce; i++) {
     const radius = 10;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
-    const y = 0;
+    const y = 0 - radius;
 
     ice.push(new Ice(x, y, radius));
   }
@@ -601,6 +642,14 @@ function init() {
   flammable = [];
   for (let i = 0; i < totalFlammable; i++) {
     flammable.push(new Flammable(25));
+  }
+
+  wind = [];
+  for (let i = 0; i < totalWind; i++) {
+    const radius = 20;
+    const x = Math.random() * (canvas.width - radius * 2) + radius;
+    const y = 0 - canvas.height / 2;
+    wind.push(new Wind(x, y, radius));
   }
 }
 let animation;
@@ -641,6 +690,7 @@ function animate() {
     if (timerId > 1000) {
       num = 2;
       ice[0].update();
+      wind[0].update();
 
       if (timerId > 1000 + timing) {
         flammable[1].update();
@@ -722,7 +772,7 @@ startBtn.addEventListener('click', () => {
   timerId = 0;
 
   bgm.currentTime = 1.5;
-  bgm.play();
+  // bgm.play();
 
   filter.style.display = 'none';
   notice.style.display = 'none';
