@@ -44,13 +44,6 @@ canvas {
   background-color: rgb(255, 255, 255);
   border-radius: 10px;
 }
-@media (max-width: 800px) {
-  canvas {
-    width: 300px;
-    height: 450px;
-    background-color: rgb(255, 255, 255);
-  }
-}
 .version {
   position: absolute;
   z-index: 1;
@@ -106,4 +99,21 @@ canvas {
 
   background-color: #3498db;
   color: white;
+}
+
+@media (max-width: 800px) {
+  canvas {
+    width: 300px;
+    height: 450px;
+    background-color: rgb(255, 255, 255);
+  }
+  .notice {
+    width: 350px;
+  }
+  .title {
+    font-size: 1.5em;
+  }
+  .start {
+    padding: 0.5em 2em 0.5em 2em;
+  }
 }
