@@ -1,20 +1,23 @@
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
-const notice = document.querySelector('.notice');
 const score = document.querySelector('.score');
 const best = document.querySelector('.best');
+const notice = document.querySelector('.notice');
+const noticeScore = document.querySelector('.notice_score');
+const noticeBest = document.querySelector('.notice_best');
 const startBtn = document.querySelector('.start');
+const filter = document.querySelector('.filter');
 
 const bgm = new Audio('./bgm.mp3');
 bgm.volume = 0.5;
 bgm.currentTime = 1.5;
 bgm.loop = true;
-bgm.play();
 
 canvas.width = 400;
 canvas.height = 600;
 
+let bestScore;
 let rightPressed = false;
 let leftPressed = false;
 
@@ -57,57 +60,31 @@ function getDis(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
 
-function checkMobileDevice() {
-  var mobileKeyWords = new Array(
-    'Android',
-    'iPhone',
-    'iPad',
-    'BlackBerry',
-    'Windows CE',
-    'SAMSUNG',
-    'LG',
-    'MOT',
-    'SonyEricsson'
-  );
-  for (var info in mobileKeyWords) {
-    if (navigator.userAgent.match(mobileKeyWords[info]) != null) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function gameOver() {
-  cancelAnimationFrame(timerId);
-
-  document.body.style.backgroundColor = '#261911';
-
-  startBtn.style.display = 'block';
-
-  startBtn.addEventListener('click', () => {
-    location.reload();
-  });
-
-  addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      location.reload();
-    }
-  });
-  bgm.pause();
-  localStorage.setItem(`${timerId}`, `${timerId}`);
-}
-
 function setBest() {
   let scoreArray = [];
   for (let i = 0; i < localStorage.length; i++) {
     scoreArray.push(localStorage.key(i));
   }
 
-  let bestScore = Math.max.apply(null, scoreArray);
+  bestScore = Math.max.apply(null, scoreArray);
+}
 
-  if (localStorage.key(0) !== null) {
-    best.innerHTML = `Best: ${bestScore}`;
-  }
+function setUserScore() {
+  noticeScore.innerHTML = `현재 기록: ${timerId}`;
+  setBest();
+  best.innerHTML = `Best: ${bestScore}`;
+  noticeBest.innerHTML = `이전 최고 기록: ${bestScore}`;
+}
+
+function gameOver() {
+  cancelAnimationFrame(animation);
+  setUserScore();
+
+  filter.style.display = 'block';
+  notice.style.display = 'block';
+
+  bgm.pause();
+  localStorage.setItem(`${timerId}`, `${timerId}`);
 }
 
 function levelUpdate(num) {
@@ -597,7 +574,6 @@ function init() {
   );
 
   rain = [];
-
   for (let i = 0; i < totalRain; i++) {
     const radius = 8;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
@@ -607,7 +583,6 @@ function init() {
   }
 
   ice = [];
-
   for (let i = 0; i < totalIce; i++) {
     const radius = 10;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
@@ -617,7 +592,6 @@ function init() {
   }
 
   fireExtinguisher = [];
-
   for (let i = 0; i < totalFireExtinguisher; i++) {
     const x = Math.random() * (canvas.width - 20);
 
@@ -625,25 +599,24 @@ function init() {
   }
 
   flammable = [];
-
   for (let i = 0; i < totalFlammable; i++) {
     flammable.push(new Flammable(25));
   }
 }
-
-let timerId;
+let animation;
+let timerId = 0;
 let num;
 let timing = Math.random() * 500 + 10;
 let timing2 = Math.random() * 500 + 10;
 
 function animate() {
-  timerId = requestAnimationFrame(animate);
+  animation = requestAnimationFrame(animate);
+
+  timerId++;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (timerId <= 10) {
-    ctx.save();
-  } else if (timerId <= 200) {
+  if (timerId <= 200) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.font = '30px "Anton"';
 
@@ -743,6 +716,17 @@ function animate() {
   player.update();
 }
 
-init();
-setBest();
-animate();
+setUserScore();
+
+startBtn.addEventListener('click', () => {
+  timerId = 0;
+
+  bgm.currentTime = 1.5;
+  bgm.play();
+
+  filter.style.display = 'none';
+  notice.style.display = 'none';
+  setUserScore();
+  init();
+  animate();
+});
