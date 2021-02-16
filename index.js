@@ -548,6 +548,19 @@ class Flammable {
         }
       }
     }
+    if (this.isGet) {
+      for (let i = 0; i < totalWind; i++) {
+        if (
+          getDis(wind[i].x, wind[i].y, this.x, this.y) <
+          wind[i].radius + this.radius
+        ) {
+          wind[i].x =
+            Math.random() * (canvas.width - wind[i].radius * 2) +
+            wind[i].radius;
+          wind[i].y = 0 - canvas.height / 2;
+        }
+      }
+    }
     if (this.radius < 800) {
       this.draw();
     }
@@ -560,27 +573,75 @@ class Wind {
     this.y = y;
     this.radius = radius;
 
-    this.vy = 20;
+    this.vy = 5;
     this.angle = Math.random() * 360;
-
-    this.swing = 1;
   }
   draw() {
+    ctx.lineWidth = 3;
+    // ctx.beginPath();
+    // ctx.fillStyle = 'black';
+    // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    // ctx.fill();
+    const g = ctx.createLinearGradient(
+      this.x,
+      this.y + this.radius,
+      this.x,
+      this.y - this.radius * 3 - 2
+    );
+    g.addColorStop(0, '#2980b9');
+    g.addColorStop(0.3, '#2980b9');
+    g.addColorStop(1, '#ecf0f1');
+
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.strokeStyle = g;
+      ctx.moveTo(this.x - 7 * i, this.y + this.radius - 1 * i);
+      ctx.quadraticCurveTo(
+        this.x - 7 * i,
+        this.y - 1 * i,
+        this.prevX - 7 * i,
+        this.y - this.radius * 3 - 1 * i
+      );
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = g;
+      ctx.moveTo(this.x + 7 * i, this.y + this.radius - 1 * i);
+      ctx.quadraticCurveTo(
+        this.x + 7 * i,
+        this.y + this.radius - 1 * i,
+        this.prevX + 7 * i,
+        this.y - this.radius * 3 - 1 * i
+      );
+      ctx.stroke();
+    }
     ctx.beginPath();
-    ctx.fillStyle = 'black';
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fill();
+    ctx.strokeStyle = g;
+    ctx.moveTo(this.x + 14, this.y + this.radius - 2);
+    ctx.lineTo(this.x + 14 + 10, this.y + this.radius - 2);
+    ctx.lineTo(this.x + 14 + 10, this.y + this.radius - 12);
+    ctx.lineTo(this.x + 14 + 5, this.y + this.radius - 12);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = g;
+    ctx.moveTo(this.x - 14, this.y + this.radius - 2);
+    ctx.lineTo(this.x - 14 - 10, this.y + this.radius - 2);
+    ctx.lineTo(this.x - 14 - 10, this.y + this.radius - 12);
+    ctx.lineTo(this.x - 14 - 5, this.y + this.radius - 12);
+    ctx.stroke();
   }
   update() {
-    this.angle += 0.5;
-    this.swing += 1;
-    this.x += Math.sin(this.angle) * this.swing;
+    this.prevX = this.x;
+
+    this.angle += 0.1;
+
+    this.x += Math.sin(this.angle) * 15;
     this.y += this.vy;
 
     if (this.y + this.radius > canvas.height) {
       this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
       this.y = 0 - canvas.height / 2;
-      this.swing = 1;
     }
     if (
       getDis(this.x, this.y, player.x, player.y) <
@@ -656,7 +717,6 @@ let animation;
 let timerId = 0;
 let num;
 let timing = Math.random() * 500 + 10;
-let timing2 = Math.random() * 500 + 10;
 
 function animate() {
   animation = requestAnimationFrame(animate);
@@ -690,7 +750,6 @@ function animate() {
     if (timerId > 1000) {
       num = 2;
       ice[0].update();
-      wind[0].update();
 
       if (timerId > 1000 + timing) {
         flammable[1].update();
@@ -710,9 +769,8 @@ function animate() {
     if (timerId > 3000) {
       num = 4;
 
-      for (let i = 1; i < 3; i++) {
-        ice[i].update();
-      }
+      wind[0].update();
+      ice[1].update();
       if (timerId > 3000 + timing) {
         flammable[2].update();
       }
@@ -739,7 +797,8 @@ function animate() {
   if (timerId < 8000) {
     if (timerId > 6000) {
       num = 7;
-      for (let i = 3; i < 6; i++) {
+      wind[1].update();
+      for (let i = 2; i < 4; i++) {
         ice[i].update();
       }
       if (timerId > 6000 + timing) {
@@ -770,9 +829,10 @@ setUserScore();
 
 startBtn.addEventListener('click', () => {
   timerId = 0;
+  timing = Math.random() * 500 + 10;
 
   bgm.currentTime = 1.5;
-  // bgm.play();
+  bgm.play();
 
   filter.style.display = 'none';
   notice.style.display = 'none';
