@@ -23,6 +23,7 @@
       <p class="notice_title">불씨를 지켜라</p>
       <p class="notice_score">현재 기록: 0</p>
       <p class="notice_best">이전 최고 기록: 0</p>
+      <!-- 버튼 임의로 추가하니까 캔버스 에리어에 가려서 클릭이 안돼서 여기다가 이벤트 넣어 놓을게요 -->
       <button class="start">start</button>
     </div>
     <div class="container">
@@ -33,6 +34,18 @@
       <div class="score">현재 기록: 0</div>
       <div class="best">최고 기록: 0</div>
     </div>
+    <!-- 버전 표기에 가려서 인라인 스타일 넣었습니다 봐주세요 살려주세요 -->
+    <div
+      class="score-board"
+      style="position: absolute; top: 2rem; left: 2rem"
+    ></div>
+    <script type="module" src="./firebase.js"></script>
+    <script type="module" src="./score-board.js"></script>
     <script type="module" src="index.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-database.js"></script>
+    <script></script>
   </body>
 </html>
