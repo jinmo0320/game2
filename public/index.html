@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="#" />
+    <title>save fire</title>
+  </head>
+  <body>
+    <div class="version">V.kimchi0.8</div>
+    <div class="filter"></div>
+    <div class="notice">
+      <p class="notice_title">불씨를 지켜라</p>
+      <p class="notice_score">현재 기록: 0</p>
+      <p class="notice_best">이전 최고 기록: 0</p>
+      <!-- 버튼 임의로 추가하니까 캔버스 에리어에 가려서 클릭이 안돼서 여기다가 이벤트 넣어 놓을게요 -->
+      <button class="start">start</button>
+    </div>
+    <div class="container">
+      <div class="title">불씨를 지켜라</div>
+      <div class="canvasArea">
+        <canvas>지원하지 않는 브라우저</canvas>
+      </div>
+      <div class="score">현재 기록: 0</div>
+      <div class="best">최고 기록: 0</div>
+    </div>
+    <!-- 버전 표기에 가려서 인라인 스타일 넣었습니다 봐주세요 살려주세요 -->
+    <div
+      class="score-board"
+      style="position: absolute; top: 2rem; left: 2rem"
+    ></div>
+    <script type="module" src="index.js"></script>
+    <script type="module" src="./score-board.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-database.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDromtOwjdA29NiqNOm73LoXwgdECzNPmU",
+        authDomain: "score-board-ec568.firebaseapp.com",
+        projectId: "score-board-ec568",
+        databaseURL: "https://score-board-ec568-default-rtdb.firebaseio.com/",
+        storageBucket: "score-board-ec568.appspot.com",
+        messagingSenderId: "910422072498",
+        appId: "1:910422072498:web:bfbb7aacf2b4b731733dab",
+        measurementId: "G-7H6L14Z4V6",
+      };
+      firebase.initializeApp(firebaseConfig);
+
+      firebase.analytics();
+    </script>
+  </body>
+</html>

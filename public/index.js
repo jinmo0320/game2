@@ -1,15 +1,15 @@
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
 
-const score = document.querySelector('.score');
-const best = document.querySelector('.best');
-const notice = document.querySelector('.notice');
-const noticeScore = document.querySelector('.notice_score');
-const noticeBest = document.querySelector('.notice_best');
-const startBtn = document.querySelector('.start');
-const filter = document.querySelector('.filter');
+const score = document.querySelector(".score");
+const best = document.querySelector(".best");
+const notice = document.querySelector(".notice");
+const noticeScore = document.querySelector(".notice_score");
+const noticeBest = document.querySelector(".notice_best");
+const startBtn = document.querySelector(".start");
+const filter = document.querySelector(".filter");
 
-const bgm = new Audio('./audio/bgm.mp3');
+const bgm = new Audio("./audio/bgm.mp3");
 bgm.volume = 0.5;
 bgm.currentTime = 1.5;
 bgm.loop = true;
@@ -21,11 +21,11 @@ let bestScore;
 let rightPressed = false;
 let leftPressed = false;
 
-addEventListener('keydown', keyDownHandler, false);
-addEventListener('keyup', keyUpHandler, false);
+addEventListener("keydown", keyDownHandler, false);
+addEventListener("keyup", keyUpHandler, false);
 
-addEventListener('touchstart', touchDown, false);
-addEventListener('touchend', touchUp, false);
+addEventListener("touchstart", touchDown, false);
+addEventListener("touchend", touchUp, false);
 
 function keyDownHandler(e) {
   if (e.keyCode == 39) {
@@ -80,15 +80,15 @@ function gameOver() {
   cancelAnimationFrame(animation);
   setUserScore();
 
-  filter.style.display = 'block';
-  notice.style.display = 'block';
+  filter.style.display = "block";
+  notice.style.display = "block";
 
   bgm.pause();
   localStorage.setItem(`${timerId}`, `${timerId}`);
 }
 
 function levelUpdate(num) {
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
   ctx.font = '50px "Anton"';
   ctx.fillText(`${num}`, canvas.width / 2, canvas.height / 2);
 }
@@ -112,7 +112,7 @@ class Player {
   draw() {
     //꼭다리
     ctx.beginPath();
-    ctx.fillStyle = '#EE5A24';
+    ctx.fillStyle = "#EE5A24";
     ctx.moveTo(this.x - this.radius, this.y);
     ctx.bezierCurveTo(
       this.x - this.radius,
@@ -142,8 +142,8 @@ class Player {
       this.y,
       this.radius
     );
-    gradient.addColorStop(0, '#fff200');
-    gradient.addColorStop(1, '#EE5A24');
+    gradient.addColorStop(0, "#fff200");
+    gradient.addColorStop(1, "#EE5A24");
     ctx.fillStyle = gradient;
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fill();
@@ -151,28 +151,28 @@ class Player {
     // 반짝이;
 
     ctx.beginPath();
-    ctx.fillStyle = '#EE5A24';
+    ctx.fillStyle = "#EE5A24";
     ctx.arc(this.sparkleX, this.sparkleY, 1.5, 0, Math.PI * 2, false);
     ctx.fill();
 
     //눈
 
     ctx.beginPath();
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = "black";
     ctx.arc(this.x - 8, this.y, 4, 0, Math.PI * 2, false);
     ctx.fill();
 
     ctx.beginPath();
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = "black";
     ctx.arc(this.x + 8, this.y, 4, 0, Math.PI * 2, false);
     ctx.fill();
     ctx.beginPath();
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = "white";
     ctx.arc(this.x - 8 + this.dir, this.y - 2, 2, 0, Math.PI * 2, false);
     ctx.fill();
 
     ctx.beginPath();
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = "white";
     ctx.arc(this.x + 8 + this.dir, this.y - 2, 2, 0, Math.PI * 2, false);
     ctx.fill();
   }
@@ -212,7 +212,7 @@ class Rain {
     this.topX = this.x;
     this.topY = this.y - 30;
     ctx.beginPath();
-    ctx.fillStyle = '#0984e3';
+    ctx.fillStyle = "#0984e3";
     ctx.moveTo(this.x - this.radius, this.y);
     ctx.bezierCurveTo(
       this.x - this.radius,
@@ -233,13 +233,13 @@ class Rain {
     ctx.fill();
 
     ctx.beginPath();
-    ctx.fillStyle = '#0984e3';
+    ctx.fillStyle = "#0984e3";
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fill();
 
     ctx.beginPath();
     ctx.lineWidth = 3;
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = "white";
     ctx.arc(this.x, this.y, this.radius - 5, 0, (Math.PI / 180) * 60, false);
     ctx.stroke();
   }
@@ -277,14 +277,14 @@ class Ice {
   }
   draw() {
     ctx.beginPath();
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = "white";
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fill();
 
     ctx.beginPath();
     const g = ctx.createRadialGradient(this.x, this.y, 3, this.x, this.y, 10);
-    g.addColorStop(0, '#81ecec');
-    g.addColorStop(1, '#00cec9');
+    g.addColorStop(0, "#81ecec");
+    g.addColorStop(1, "#00cec9");
     ctx.fillStyle = g;
     ctx.rect(
       this.x - this.side / 2,
@@ -340,7 +340,7 @@ class Powder {
   draw() {
     ctx.beginPath();
     ctx.lineWidth = 0.5;
-    ctx.strokeStyle = 'transparent';
+    ctx.strokeStyle = "transparent";
     ctx.moveTo(this.x + 15, this.y);
     ctx.lineTo(this.x + 15, this.laserH);
     ctx.stroke();
@@ -352,9 +352,9 @@ class Powder {
       this.x + this.w,
       this.y
     );
-    g3.addColorStop(0, '#b2bec3');
-    g3.addColorStop(0.5, '#dfe6e9');
-    g3.addColorStop(1, '#b2bec3');
+    g3.addColorStop(0, "#b2bec3");
+    g3.addColorStop(0.5, "#dfe6e9");
+    g3.addColorStop(1, "#b2bec3");
     ctx.fillStyle = g3;
     ctx.rect(this.x, this.y, this.w, this.h);
     ctx.fill();
@@ -409,9 +409,9 @@ class FireExtinguisher {
   draw() {
     ctx.beginPath();
     const g2 = ctx.createLinearGradient(this.x, 0, this.x + this.w, 0);
-    g2.addColorStop(0, '#1e272e');
-    g2.addColorStop(0.5, '#485460');
-    g2.addColorStop(1, '#1e272e');
+    g2.addColorStop(0, "#1e272e");
+    g2.addColorStop(0.5, "#485460");
+    g2.addColorStop(1, "#1e272e");
     ctx.fillStyle = g2;
     ctx.rect(this.x, this.y, this.w, this.h);
     ctx.fill();
@@ -423,9 +423,9 @@ class FireExtinguisher {
       this.x + this.w + this.gap,
       this.y + this.h + this.nozzleH
     );
-    g.addColorStop(0, '#f1c40f');
-    g.addColorStop(0.5, '#ffdd59');
-    g.addColorStop(1, '#f1c40f');
+    g.addColorStop(0, "#f1c40f");
+    g.addColorStop(0.5, "#ffdd59");
+    g.addColorStop(1, "#f1c40f");
     ctx.fillStyle = g;
     ctx.moveTo(this.x, this.y + this.h);
     ctx.lineTo(this.x + this.w, this.y + this.h);
@@ -435,9 +435,9 @@ class FireExtinguisher {
 
     ctx.beginPath();
     const g1 = ctx.createLinearGradient(this.x, 0, this.x + this.w, 0);
-    g1.addColorStop(0, '#95a5a6');
-    g1.addColorStop(0.5, '#ecf0f1');
-    g1.addColorStop(1, '#95a5a6');
+    g1.addColorStop(0, "#95a5a6");
+    g1.addColorStop(0.5, "#ecf0f1");
+    g1.addColorStop(1, "#95a5a6");
     ctx.fillStyle = g1;
     ctx.rect(this.x - 1, this.y + this.h - 7, this.w + 2, 7);
     ctx.fill();
@@ -484,7 +484,7 @@ class Flammable {
     this.isGet = false;
 
     this.img = new Image();
-    this.img.src = './img/bomb.png';
+    this.img.src = "./img/bomb.png";
   }
   draw() {
     ctx.beginPath();
@@ -499,8 +499,8 @@ class Flammable {
       this.y,
       this.radius
     );
-    g.addColorStop(0, 'transparent');
-    g.addColorStop(1, '#e74c3c');
+    g.addColorStop(0, "transparent");
+    g.addColorStop(1, "#e74c3c");
     ctx.fillStyle = g;
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fill();
@@ -588,9 +588,9 @@ class Wind {
       this.x,
       this.y - this.radius * 3 - 2
     );
-    g.addColorStop(0, '#2980b9');
-    g.addColorStop(0.3, '#2980b9');
-    g.addColorStop(1, '#ecf0f1');
+    g.addColorStop(0, "#2980b9");
+    g.addColorStop(0.3, "#2980b9");
+    g.addColorStop(1, "#ecf0f1");
 
     for (let i = 0; i < 3; i++) {
       ctx.beginPath();
@@ -726,7 +726,7 @@ function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (timerId <= 200) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
     ctx.font = '30px "Anton"';
 
     ctx.fillText(
@@ -827,15 +827,15 @@ function animate() {
 
 setUserScore();
 
-startBtn.addEventListener('click', () => {
+startBtn.addEventListener("click", () => {
   timerId = 0;
   timing = Math.random() * 500 + 10;
 
   bgm.currentTime = 1.5;
   bgm.play();
 
-  filter.style.display = 'none';
-  notice.style.display = 'none';
+  filter.style.display = "none";
+  notice.style.display = "none";
   setUserScore();
   init();
   animate();
