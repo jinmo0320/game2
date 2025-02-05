@@ -17,35 +17,68 @@
     <title>save fire</title>
   </head>
   <body>
-    <div class="version">V.kimchi0.8</div>
     <div class="filter"></div>
     <div class="notice">
-      <p class="notice_title">불씨를 지켜라</p>
-      <p class="notice_score">현재 기록: 0</p>
-      <p class="notice_best">이전 최고 기록: 0</p>
-      <!-- 버튼 임의로 추가하니까 캔버스 에리어에 가려서 클릭이 안돼서 여기다가 이벤트 넣어 놓을게요 -->
-      <button class="start">start</button>
+      <p class="notice_title">SAVE FIRE</p>
+      <p class="notice_score">Score: 0</p>
+      <p class="notice_best">Best: 0</p>
+      <button class="start">Start</button>
+      <button class="user">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="40px"
+          viewBox="0 -960 960 960"
+          width="40px"
+          fill="#000000"
+        >
+          <path
+            d="M479.84-146.67q80.49 0 136.99-56.34 56.5-56.34 56.5-136.83 0-80.49-56.34-136.99-56.34-56.5-136.83-56.5-80.49 0-136.99 56.34-56.5 56.34-56.5 136.83 0 80.49 56.34 136.99 56.34 56.5 136.83 56.5ZM351.67-566q25.33-15 54.16-23.5 28.84-8.5 59.84-9.83l-107-214H228L351.67-566Zm256.66 0 124-247.33h-131l-83.66 168L544-592.67q17.33 4.67 33.33 11.17t31 15.5Zm-341 374.67Q245-223 232.5-260.5T220-340q0-42 12.5-79.5t34.83-69.17q-52 11.34-86.33 52.17T146.67-340q0 55.67 34.33 96.5t86.33 52.17Zm425.34 0q52-11.34 86.33-52.17t34.33-96.5q0-55.67-34.33-96.5t-86.33-52.17Q715-457 727.5-419.5T740-340q0 42-12.5 79.5t-34.83 69.17ZM480-80q-40 0-76.5-11.5T336-123q-9 2-18 2.5t-19 .5q-91 0-155-64T80-339q0-87 58-149t143-69L120-880h280l80 160 80-160h280L680-559q85 8 142.5 70T880-340q0 92-64 156t-156 64q-9 0-18.5-.5T623-123q-31 20-67 31.5T480-80Zm0-260ZM351.67-566 228-813.33 351.67-566Zm256.66 0 124-247.33-124 247.33ZM406-230l28-91-74-53h91l29-96 29 96h91l-74 53 28 91-74-56-74 56Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="leaderBoard">
+      <div class="userInfo">
+        <div class="userImage"></div>
+        <div class="userName"></div>
+      </div>
+      <div class="rank">
+        <div class="number one">1</div>
+        <div class="name first"></div>
+        <div class="rankscore first"></div>
+      </div>
+      <div class="rank">
+        <div class="number two">2</div>
+        <div class="name second"></div>
+        <div class="rankscore second"></div>
+      </div>
+      <div class="rank">
+        <div class="number three">3</div>
+        <div class="name third"></div>
+        <div class="rankscorescore third"></div>
+      </div>
+      <button class="backBtn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#434343"
+        >
+          <path
+            d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"
+          />
+        </svg>
+      </button>
     </div>
     <div class="container">
-      <div class="title">불씨를 지켜라</div>
+      <div class="title">SAVE FIRE</div>
       <div class="canvasArea">
-        <canvas>지원하지 않는 브라우저</canvas>
+        <canvas></canvas>
       </div>
-      <div class="score">현재 기록: 0</div>
-      <div class="best">최고 기록: 0</div>
+      <div class="score">Score: 0</div>
+      <div class="best">Best: 0</div>
     </div>
-    <!-- 버전 표기에 가려서 인라인 스타일 넣었습니다 봐주세요 살려주세요 -->
-    <div
-      class="score-board"
-      style="position: absolute; top: 2rem; left: 2rem"
-    ></div>
-    <script type="module" src="./firebase.js"></script>
-    <script type="module" src="./score-board.js"></script>
-    <script type="module" src="index.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-database.js"></script>
-    <script></script>
+    <script type="module" src="./dist/bundle.js"></script>
   </body>
 </html>

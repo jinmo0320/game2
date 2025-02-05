@@ -9,7 +9,7 @@ html {
 body {
   width: 100%;
   height: 100%;
-  background-color: #c23616;
+  background-color: #fcf8fb;
   overflow: hidden;
 }
 .container {
@@ -25,24 +25,24 @@ body {
   text-align: center;
 }
 .title {
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2em;
   font-weight: 900;
-  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 .score {
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 1.5em;
 }
 .best {
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 1.5em;
 }
 canvas {
   width: 400px;
   height: 600px;
-  background-color: rgb(255, 255, 255);
-  border-radius: 10px;
+  background: #ffffff;
+  border: 2px solid rgb(228, 228, 228);
+  border-radius: 5px;
 }
 .version {
   position: absolute;
@@ -65,10 +65,10 @@ canvas {
   left: 50%;
   top: 0%;
   transform: translate(-50%, -100%);
-  border-radius: 20px;
   text-align: center;
   background: rgb(255, 255, 255);
   animation: down 1s forwards;
+  border-radius: 5px;
 }
 @keyframes down {
   0% {
@@ -80,10 +80,10 @@ canvas {
   }
 }
 .notice > * {
-  margin: 18px;
+  margin: 15px;
 }
 .notice_title {
-  color: red;
+  color: rgb(0, 0, 0);
   font-size: 2em;
   font-weight: 700;
 }
@@ -91,14 +91,99 @@ canvas {
   display: block;
   margin-left: 50%;
   transform: translate(-50%, 0%);
-  padding: 1em 3em 1em 3em;
+  padding: 0.3em 1em 0.3em 1em;
   font-size: 20px;
   font-weight: 500;
-  border-radius: 100px;
   border: none;
+  border-radius: 10px;
 
   background-color: #3498db;
   color: white;
+}
+
+.user {
+  padding: 0.5em 2em 0.5em 2em;
+  background-color: transparent;
+  border-radius: 10px;
+  border: none;
+  border-bottom: 2px solid rgb(153, 153, 153);
+  border-right: 2px solid rgb(153, 153, 153);
+
+  font-size: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 8px;
+}
+
+.leaderBoard {
+  animation: down 1s forwards;
+  display: none;
+  position: absolute;
+  z-index: 4;
+
+  width: 500px;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgb(255, 254, 254);
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.userInfo {
+  display: grid;
+  justify-content: center;
+}
+.userImage {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.userName {
+  font-weight: bold;
+  color: rgb(109, 109, 109);
+}
+
+.rank {
+  border: none;
+  border-radius: 10px;
+  margin: 10px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: repeat(2, 1fr);
+}
+.number {
+  grid-row: 1 / 3;
+}
+
+.one,
+.two,
+.three {
+  font-size: 2.5em;
+  font-weight: 900;
+}
+
+.one {
+  color: gold;
+}
+.two {
+  color: silver;
+}
+.three {
+  color: rgb(122, 86, 71);
+}
+
+.backBtn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  background-color: transparent;
 }
 
 @media (max-width: 800px) {
